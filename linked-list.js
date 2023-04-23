@@ -21,84 +21,25 @@ class LinkedList {
   /** push(val): add new value to end of list. */
 
   push(val) {
-    const newNode = new Node(val);
-
-    if (!this.head){
-      this.head = newNode;
-      this.tail = newNode;
-    }
-
-    this.tail.next = newNode
-    this.tail = newNode;
-    this.length += 1
+    this.insertAt(this.length, val)
   }
 
   /** unshift(val): add new value to start of list. */
 
   unshift(val) {
-    const newNode = new Node(val);
-
-
-    if (!this.head){
-      this.head = newNode;
-      this.tail = newNode;
-    }
-
-    newNode.next = this.head;
-    this.head = newNode;
-    this.length += 1
+    this.insertAt(0, val)
   }
 
   /** pop(): return & remove last item. */
 
   pop() {
-    if (!this.head){
-      throw new Error('List empty');
-    }
-
-    if (this.head === this.tail){
-      let val = this.head.val
-      this.head = null;
-      this.tail = null;
-      this.length -= 1;
-      return val
-    }
-
-    let currentNode = this.head;
-    let nextNode = currentNode.next;
-
-    while (nextNode.next){
-      currentNode = nextNode;
-      nextNode = currentNode.next
-    }
-
-    currentNode.next = null;
-    this.tail = currentNode;
-    this.length -= 1;
-
-    return nextNode.val
+    return this.removeAt(this.length - 1)
   }
 
   /** shift(): return & remove first item. */
 
   shift() {
-    if (!this.head){
-      throw new Error('List empty');
-    }
-
-    const val = this.head.val
-
-    if (this.head === this.tail){
-      this.head = null;
-      this.tail = null;
-      this.length -= 1;
-      return val
-    }
-
-    this.head = this.head.next;
-    this.length -= 1;
-
-    return val;
+    return this.removeAt(0)
   }
 
   /** getAt(idx): get val at idx. */
@@ -153,6 +94,7 @@ class LinkedList {
 
     const newNode = new Node(val);
 
+    // insertAt start of list case
     if (idx === 0){
       if (this.length === 0){
         this.head = newNode;
@@ -166,13 +108,16 @@ class LinkedList {
       return undefined
     }
 
+    // insert at end of list case
     if(idx === this.length){
       const currentNode = this.tail
       currentNode.next = newNode;
       this.tail = newNode;
       this.length += 1
+      return undefined
     }
 
+    // insert in middle
     let currentNode = this.head;
     let nextNode = currentNode.next;
     let i = 0;
@@ -198,8 +143,6 @@ class LinkedList {
   removeAt(idx) {
     if(this.length === 0) throw new Error('List empty')
     if (idx > this.length || idx < 0) throw new Error(`No item at index: ${idx} `)
-
-    console.log(this.head.val)
 
     if (idx === 0){
       const val = this.head.val
